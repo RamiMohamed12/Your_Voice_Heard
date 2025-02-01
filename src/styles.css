@@ -1,0 +1,183 @@
+/* General body styling for dark mode */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;  /* Dark background for dark mode */
+    color: #e0e0e0;  /* Light text for contrast */
+    margin: 0;
+    padding: 0;
+}
+
+/* Header with blue accents */
+header {
+    background: #1f1f1f;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between; /* Space between logo and nav */
+    align-items: center;
+    border-bottom: 2px solid #444;
+    box-shadow: 0 0 15px rgba(0, 0, 255, 0.5);  /* Soft blue glow effect */
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin: 0;
+}
+
+nav {
+    /* Keeping the nav to the top-right */
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+nav a {
+    color: #1e90ff;  /* Blue accents */
+    margin: 0 15px;
+    text-decoration: none;
+    font-size: 1.2em;
+    transition: all 0.3s ease;
+}
+
+nav a:hover {
+    color: #4682b4;  /* Darker blue on hover */
+}
+
+/* Main content styling */
+main {
+    width: 80%;
+    margin: 20px auto;
+    padding: 30px;
+    background: #181818;  /* Slightly lighter dark background */
+    box-shadow: 0 0 20px rgba(0, 0, 255, 0.3);  /* Soft blue glow */
+}
+
+/* Form container with sharp borders */
+.auth-container {
+    max-width: 450px;
+    margin: 0 auto;
+    padding: 30px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    background: #222;
+    box-shadow: 0 0 20px rgba(0, 0, 255, 0.4);  /* Soft blue glow */
+}
+
+/* Form group styling */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    color: #e0e0e0;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #333;
+    background-color: #333;
+    color: #fff;
+    font-size: 1.1em;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #1e90ff;  /* Blue glow on focus */
+    outline: none;
+}
+
+/* Button styling with blue accents */
+button {
+    background-color: #1e90ff;  /* Blue button */
+    color: white;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2em;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(30, 144, 255, 0.5);
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #4682b4;  /* Darker blue on hover */
+    box-shadow: 0 0 20px rgba(70, 130, 180, 0.7);
+}
+
+/* Error message styling */
+.error {
+    color: #ff0000;  /* Red error messages */
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ff0000;
+    border-radius: 5px;
+    background-color: #2a2a2a;
+    font-size: 1.1em;
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 15px;
+    background: #1f1f1f;
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-top: 2px solid #444;
+    box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
+}
+
+/* Links */
+a {
+    text-decoration: none;
+    color: #1e90ff;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #4682b4;
+}
+
+/* List of polls with blue accents */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin: 20px 0;
+    font-size: 1.3em;
+}
+
+li a {
+    color: #1e90ff;
+    transition: color 0.3s ease;
+}
+
+li a:hover {
+    color: #4682b4;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 10px;
+    border: 1px solid #444;
+    text-align: left;
+}
+
+table th {
+    background-color: #1f1f1f;
+    color: #1e90ff;
+}
