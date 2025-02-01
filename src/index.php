@@ -39,7 +39,7 @@ $polls = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <main>
     <h2>Current Polls</h2>
-    <ul>
+   <ul>
     <?php if (count($polls) > 0): ?>
         <?php foreach ($polls as $poll): ?>
             <li>
@@ -47,12 +47,18 @@ $polls = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php echo htmlspecialchars($poll['question']); ?>
                 </a>
                 (<a href="poll_results.php?id=<?php echo $poll['id']; ?>">View Results</a>)
+                <?php if ($_SESSION['user']['is_admin'] == 1): ?>
+                    <form action="delete_poll.php" method="POST" style="display:inline;">
+                        <input type="hidden" name="poll_id" value="<?php echo $poll['id']; ?>">
+                        <button type="submit" onclick="return confirm('Are you sure you want to delete this poll?');">Delete</button>
+                    </form>
+                <?php endif; ?>
             </li>
         <?php endforeach; ?>
     <?php else: ?>
         <li>No polls available at the moment.</li>
     <?php endif; ?>
-</ul>
+</ul> 
     </main>
 
     <footer>
