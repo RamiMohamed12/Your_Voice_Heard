@@ -24,41 +24,41 @@ $polls = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <header>
         <h1>Your Voice Heard</h1> <!-- Logo placed on the left -->
         <nav>
-    <?php if (isset($_SESSION['user'])): ?>
-        <span>Welcome, <?php echo htmlspecialchars($_SESSION['user']['username']); ?>!</span>
-        <?php if ($_SESSION['user']['is_admin'] == 1): ?>
-            <a href="create_poll.php">Create Poll</a>
-        <?php endif; ?>
-        <a href="logout.php">Logout</a>
-    <?php else: ?>
-        <a href="login.php">Login</a>
-        <a href="register.php">Register</a>
-    <?php endif; ?>
-</nav>       
+            <?php if (isset($_SESSION['user'])): ?>
+                <span>Welcome, <?php echo htmlspecialchars($_SESSION['user']['username']); ?>!</span>
+                <?php if ($_SESSION['user']['is_admin'] == 1): ?>
+                    <a href="create_poll.php">Create Poll</a>
+                <?php endif; ?>
+                <a href="logout.php">Logout</a>
+            <?php else: ?>
+                <a href="login.php">Login</a>
+                <a href="register.php">Register</a>
+            <?php endif; ?>
+        </nav>
     </header>
 
     <main>
-    <h2>Current Polls</h2>
-   <ul>
-    <?php if (count($polls) > 0): ?>
-        <?php foreach ($polls as $poll): ?>
-            <li>
-                <a href="poll.php?id=<?php echo $poll['id']; ?>">
-                    <?php echo htmlspecialchars($poll['question']); ?>
-                </a>
-                (<a href="poll_results.php?id=<?php echo $poll['id']; ?>">View Results</a>)
-                <?php if ($_SESSION['user']['is_admin'] == 1): ?>
-                    <form action="delete_poll.php" method="POST" style="display:inline;">
-                        <input type="hidden" name="poll_id" value="<?php echo $poll['id']; ?>">
-                        <button type="submit" onclick="return confirm('Are you sure you want to delete this poll?');">Delete</button>
-                    </form>
-                <?php endif; ?>
-            </li>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <li>No polls available at the moment.</li>
-    <?php endif; ?>
-</ul> 
+        <h2>Current Polls</h2>
+        <ul>
+            <?php if (count($polls) > 0): ?>
+                <?php foreach ($polls as $poll): ?>
+                    <li>
+                        <a href="poll.php?id=<?php echo $poll['id']; ?>">
+                            <?php echo htmlspecialchars($poll['question']); ?>
+                        </a>
+                        (<a href="poll_results.php?id=<?php echo $poll['id']; ?>">View Results</a>)
+                        <?php if (isset($_SESSION['user']) && $_SESSION['user']['is_admin'] == 1): ?>
+                            <form action="delete_poll.php" method="POST" style="display:inline;">
+                                <input type="hidden" name="poll_id" value="<?php echo $poll['id']; ?>">
+                                <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete this poll?');">Delete</button>
+                            </form>
+                        <?php endif; ?>
+                    </li>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <li>No polls available at the moment.</li>
+            <?php endif; ?>
+        </ul>
     </main>
 
     <footer>
@@ -66,4 +66,3 @@ $polls = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </footer>
 </body>
 </html>
-

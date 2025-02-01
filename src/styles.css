@@ -182,6 +182,23 @@ table th {
     color: #1e90ff;
 }
 
+.delete-button {
+    background-color: #ff4d4d; /* Red color for delete button */
+    color: white;
+    padding: 5px 10px; /* Smaller padding */
+    border: none;
+    border-radius: 3px; /* Slightly rounded corners */
+    font-size: 0.9em; /* Smaller font size */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 10px; /* Add some spacing between the link and the button */
+}
+
+.delete-button:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+
 @keyframes blink {
     0% { opacity: 1; }
     50% { opacity: 0; }
