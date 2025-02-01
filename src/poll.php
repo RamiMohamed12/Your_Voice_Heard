@@ -22,6 +22,17 @@ if (!$poll) {
     $stmt = $pdo->prepare("SELECT * FROM choices WHERE poll_id = ?");
     $stmt->execute([$pollId]);
     $choices = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Calculate remaining time if the poll has an end time
+    if ($poll['end_time']) {
+        $endTime = strtotime($poll['end_time']);
+        $currentTime = time();
+        $remainingTime = $endTime - $currentTime;
+
+        if ($remainingTime <= 0) {
+            $error = "This poll has ended. Voting is no longer allowed.";
+        }
+    }
 }
 
 // Handle vote submission
@@ -59,6 +70,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vote - Polling Website</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Add blinking animation for remaining time */
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .blinking {
+            animation: blink 1s infinite;
+            color: red; /* Optional: Change color to make it more noticeable */
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -72,24 +96,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
 
     <main>
-       <div class="auth-container">
-    <h2><?php echo htmlspecialchars($poll['question']); ?></h2>
-    <?php if ($error): ?>
-        <div class="error"><?php echo $error; ?></div>
-    <?php endif; ?>
-    <form method="POST">
-        <?php foreach ($choices as $choice): ?>
-            <div class="form-group">
-                <label>
-                    <input type="radio" name="choice" value="<?php echo $choice['id']; ?>" required>
-                    <?php echo htmlspecialchars($choice['choice_text']); ?>
-                </label>
-            </div>
-        <?php endforeach; ?>
-        <button type="submit">Vote</button>
-    </form>
-    <p><a href="poll_results.php?id=<?php echo $pollId; ?>">View Results</a></p>
-</div> 
+        <div class="auth-container">
+            <h2><?php echo htmlspecialchars($poll['question']); ?></h2>
+            <?php if ($error): ?>
+                <div class="error"><?php echo $error; ?></div>
+            <?php endif; ?>
+
+            <!-- Display remaining time if the poll has an end time -->
+            <?php if ($poll['end_time']): ?>
+                <?php
+                $endTime = strtotime($poll['end_time']);
+                $currentTime = time();
+                $remainingTime = $endTime - $currentTime;
+
+                if ($remainingTime > 0) {
+                    $hours = floor($remainingTime / 3600);
+                    $minutes = floor(($remainingTime % 3600) / 60);
+                    $seconds = $remainingTime % 60;
+                    echo "<p class='blinking'>Time remaining: $hours hours, $minutes minutes, $seconds seconds</p>";
+                } else {
+                    echo "<p>This poll has ended.</p>";
+                }
+                ?>
+            <?php endif; ?>
+
+            <!-- Voting form (only show if the poll is still active) -->
+            <?php if (!isset($error) || $error !== "This poll has ended. Voting is no longer allowed."): ?>
+                <form method="POST">
+                    <?php foreach ($choices as $choice): ?>
+                        <div class="form-group">
+                            <label>
+                                <input type="radio" name="choice" value="<?php echo $choice['id']; ?>" required>
+                                <?php echo htmlspecialchars($choice['choice_text']); ?>
+                            </label>
+                        </div>
+                    <?php endforeach; ?>
+                    <button type="submit">Vote</button>
+                </form>
+            <?php endif; ?>
+
+            <p><a href="poll_results.php?id=<?php echo $pollId; ?>">View Results</a></p>
+        </div>
     </main>
 
     <footer>
