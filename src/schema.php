@@ -19,6 +19,8 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS polls (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );");
 
+$pdo->exec("ALTER TABLE polls ADD COLUMN end_time TIMESTAMP DEFAULT NULL;");
+
 $pdo-> exec("CREATE TABLE IF NOT EXISTS choices ( 
     id INT AUTO_INCREMENT PRIMARY KEY, 
     poll_id INT NOT NULL, 
