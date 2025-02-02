@@ -17,12 +17,12 @@ $polls = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Voice Heard</title> <!-- Changed title -->
-    <link rel="stylesheet" href="styles.css"> <!-- Updated CSS -->
+    <title>Your Voice Heard</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Your Voice Heard</h1> <!-- Logo placed on the left -->
+        <h1>Your Voice Heard</h1>
         <nav>
             <?php if (isset($_SESSION['user'])): ?>
                 <span>Welcome, <?php echo htmlspecialchars($_SESSION['user']['username']); ?>!</span>
@@ -41,11 +41,29 @@ $polls = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h2>Current Polls</h2>
         <ul>
             <?php if (count($polls) > 0): ?>
+                <?php $counter = 1; ?>
                 <?php foreach ($polls as $poll): ?>
                     <li>
+                        <span class="poll-counter"><?php echo $counter; ?>.</span>
                         <a href="poll.php?id=<?php echo $poll['id']; ?>">
                             <?php echo htmlspecialchars($poll['question']); ?>
                         </a>
+                        <?php if (!empty($poll['end_time'])): ?>
+                            <?php
+                            $endTime = strtotime($poll['end_time']);
+                            $currentTime = time();
+                            $remainingTime = $endTime - $currentTime;
+
+                            if ($remainingTime > 0) {
+                                $hours = floor($remainingTime / 3600);
+                                $minutes = floor(($remainingTime % 3600) / 60);
+                                $seconds = $remainingTime % 60;
+                                echo "<span class='blinking'> (Time remaining: $hours hours, $minutes minutes, $seconds seconds)</span>";
+                            } else {
+                                echo "<span> (Poll ended)</span>";
+                            }
+                            ?>
+                        <?php endif; ?>
                         (<a href="poll_results.php?id=<?php echo $poll['id']; ?>">View Results</a>)
                         <?php if (isset($_SESSION['user']) && $_SESSION['user']['is_admin'] == 1): ?>
                             <form action="delete_poll.php" method="POST" style="display:inline;">
@@ -54,6 +72,7 @@ $polls = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </form>
                         <?php endif; ?>
                     </li>
+                    <?php $counter++; ?>
                 <?php endforeach; ?>
             <?php else: ?>
                 <li>No polls available at the moment.</li>
@@ -62,7 +81,7 @@ $polls = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </main>
 
     <footer>
-        <p>&copy; 2025 Your Voice Heard or Not</p>
+        <p>&copy; 2025 Your Voice Heard</p>
     </footer>
 </body>
 </html>

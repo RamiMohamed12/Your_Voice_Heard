@@ -5,6 +5,9 @@ body {
     color: #e0e0e0;  /* Light text for contrast */
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 /* Header with blue accents */
@@ -25,15 +28,12 @@ header h1 {
 }
 
 nav {
-    /* Keeping the nav to the top-right */
-    position: absolute;
-    top: 20px;
-    right: 20px;
+    display: flex;
+    gap: 15px;
 }
 
 nav a {
     color: #1e90ff;  /* Blue accents */
-    margin: 0 15px;
     text-decoration: none;
     font-size: 1.2em;
     transition: all 0.3s ease;
@@ -45,11 +45,13 @@ nav a:hover {
 
 /* Main content styling */
 main {
+    flex: 1;
     width: 80%;
     margin: 20px auto;
     padding: 30px;
     background: #181818;  /* Slightly lighter dark background */
     box-shadow: 0 0 20px rgba(0, 0, 255, 0.3);  /* Soft blue glow */
+    border-radius: 10px;
 }
 
 /* Form container with sharp borders */
@@ -126,9 +128,6 @@ footer {
     padding: 15px;
     background: #1f1f1f;
     color: #fff;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
     border-top: 2px solid #444;
     box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
 }
@@ -198,7 +197,6 @@ table th {
     background-color: #cc0000; /* Darker red on hover */
 }
 
-
 @keyframes blink {
     0% { opacity: 1; }
     50% { opacity: 0; }
@@ -208,4 +206,11 @@ table th {
 .blinking {
     animation: blink 1s infinite;
     color: red; /* Optional: Change color to make it more noticeable */
+}
+
+/*Poll counter styling */
+.poll-counter {
+    font-weight: bold;
+    color: #1e90ff; /* Blue color to match the theme */
+    margin-right: 10px; /* Add some spacing between the counter and the poll question */
 }

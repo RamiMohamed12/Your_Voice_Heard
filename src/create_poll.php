@@ -13,12 +13,19 @@ $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $question = trim($_POST['question']);
     $choices = array_filter(array_map('trim', $_POST['choices'])); // Remove empty choices
+    $duration = isset($_POST['duration']) ? intval($_POST['duration']) : 0; // Duration in hours (optional)
 
     if (!empty($question) && count($choices) >= 2) {
         try {
-            // Insert the poll question
-            $stmt = $pdo->prepare("INSERT INTO polls (question) VALUES (?)");
-            $stmt->execute([$question]);
+            // Calculate end time if duration is provided
+            $endTime = null;
+            if ($duration > 0) {
+                $endTime = date('Y-m-d H:i:s', strtotime("+$duration hours"));
+            }
+
+            // Insert the poll question with optional end time
+            $stmt = $pdo->prepare("INSERT INTO polls (question, end_time) VALUES (?, ?)");
+            $stmt->execute([$question, $endTime]);
             $pollId = $pdo->lastInsertId();
 
             // Insert the choices
@@ -37,39 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Please provide a question and at least two choices.";
     }
 }
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $question = trim($_POST['question']);
-    $choices = array_filter(array_map('trim', $_POST['choices'])); // Remove empty choices
-    $duration = intval($_POST['duration']); // Duration in hours
-
-    if (!empty($question) && count($choices) >= 2 && $duration > 0) {
-        try {
-            // Calculate end time
-            $endTime = date('Y-m-d H:i:s', strtotime("+$duration hours"));
-
-            // Insert the poll question with end time
-            $stmt = $pdo->prepare("INSERT INTO polls (question, end_time) VALUES (?, ?)");
-            $stmt->execute([$question, $endTime]);
-            $pollId = $pdo->lastInsertId();
-
-            // Insert the choices
-            $stmt = $pdo->prepare("INSERT INTO choices (poll_id, choice_text) VALUES (?, ?)");
-            foreach ($choices as $choice) {
-                $stmt->execute([$pollId, $choice]);
-            }
-
-            $_SESSION['success'] = "Poll created successfully!";
-            header("Location: index.php");
-            exit;
-        } catch (PDOException $e) {
-            $error = "An error occurred while creating the poll.";
-        }
-    } else {
-        $error = "Please provide a question, at least two choices, and a valid duration.";
-    }
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -109,11 +83,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="text" name="choices[]">
                     <input type="text" name="choices[]">
                 </div>
-                 <div class="form-group">
-                 <label>Poll Duration (in hours):</label>
-                 <input type="number" name="duration" min="1" required>
-                 </div>
-                 <button type="submit">Create Poll</button>
+                <div class="form-group">
+                    <label>Poll Duration (in hours, optional):</label>
+                    <input type="number" name="duration" min="0" placeholder="Leave blank for no time limit">
+                </div>
+                <button type="submit">Create Poll</button>
             </form>
         </div>
     </main>
